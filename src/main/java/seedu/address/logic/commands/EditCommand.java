@@ -27,6 +27,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.person.Remark;
 
 /**
  * Edits the details of an existing person in the address book.
@@ -100,8 +101,9 @@ public class EditCommand extends Command {
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+        Remark updatedRemark = editPersonDescriptor.getRemark().orElse(personToEdit.getRemark());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags, updatedRemark);
     }
 
     @Override
@@ -139,6 +141,8 @@ public class EditCommand extends Command {
         private Address address;
         private Set<Tag> tags;
 
+        private Remark remark;
+
         public EditPersonDescriptor() {}
 
         /**
@@ -151,6 +155,7 @@ public class EditCommand extends Command {
             setEmail(toCopy.email);
             setAddress(toCopy.address);
             setTags(toCopy.tags);
+            setRemark(toCopy.remark);
         }
 
         /**
@@ -186,6 +191,10 @@ public class EditCommand extends Command {
 
         public void setAddress(Address address) {
             this.address = address;
+        }
+
+        public void setRemark(Remark remark) {
+            this.remark = remark;
         }
 
         public Optional<Address> getAddress() {
@@ -225,7 +234,8 @@ public class EditCommand extends Command {
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
-                    && Objects.equals(tags, otherEditPersonDescriptor.tags);
+                    && Objects.equals(tags, otherEditPersonDescriptor.tags)
+                    && Objects.equals(remark, otherEditPersonDescriptor.remark);
         }
 
         @Override
@@ -237,6 +247,10 @@ public class EditCommand extends Command {
                     .add("address", address)
                     .add("tags", tags)
                     .toString();
+        }
+
+        public Optional<Remark> getRemark() {
+            return Optional.ofNullable(remark);
         }
     }
 }
