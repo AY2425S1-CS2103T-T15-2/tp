@@ -7,6 +7,7 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -65,6 +66,30 @@ public class MarkPaidCommand extends Command {
         }
 
         Person personToMark = lastShownList.get(index.getZeroBased());
+        Set<MonthPaid> existingMonthsPaid = personToMark.getMonthsPaid();
+
+        // Define the pattern for valid YYYY-MM format
+        Pattern monthPattern = Pattern.compile("^\\d{4}-(0[1-9]|1[0-2])$");
+
+        // Check for invalid months paid format
+        for (MonthPaid monthPaid : monthsPaid) {
+            // Strip brackets before validation
+            String monthStr = monthPaid.toString().replaceAll("[\\[\\]]", "");
+            if (!monthPattern.matcher(monthStr).matches()) {
+                String invalidMonthsMessage = String.format("Invalid month format: %s. "
+                        + "Month must be in YYYY-MM format, where MM is 01-12.", monthStr);
+                throw new CommandException(invalidMonthsMessage);
+            }
+        }
+
+        //Check for duplicate months paid
+        for (MonthPaid monthPaid : monthsPaid) {
+            if (existingMonthsPaid.contains(monthPaid)) {
+                String duplicateMonthsMessage = String.format("Duplicate month paid: %s", monthPaid);
+                throw new CommandException(duplicateMonthsMessage);
+            }
+        }
+
         Person markedPerson = createMarkedPerson(personToMark, monthsPaid);
 
         model.setPerson(personToMark, markedPerson);
