@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASSID;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MONTHPAID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -27,7 +28,8 @@ public class FindCommand extends Command {
             + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
             + "Example 1: " + COMMAND_WORD + " " + PREFIX_NAME + "alice bob charlie\n"
             + "Example 2: " + COMMAND_WORD + " " + PREFIX_CLASSID + "1 2\n"
-            + "Example 3: " + COMMAND_WORD + " " + PREFIX_NAME + "alice " + PREFIX_CLASSID + "1\n";
+            + "Example 3: " + COMMAND_WORD + " " + PREFIX_NAME + "alice " + PREFIX_CLASSID + "1\n"
+            + "Example 4: " + COMMAND_WORD + " " + PREFIX_MONTHPAID + "2024-10\n";
 
     public static final String NO_SEARCH_FIELDS_PROVIDED = "At least one field to search by must be provided.";
 
