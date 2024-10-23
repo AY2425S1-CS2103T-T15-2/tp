@@ -22,12 +22,6 @@ public class MonthsPaidContainsKeywordsPredicate implements Predicate<Person> {
                 .anyMatch(keyword -> person.getMonthsPaid().stream()
                         .anyMatch(monthPaid -> StringUtil.containsWordIgnoreCase(monthPaid.monthPaidValue, keyword)));
     }
-
-    private boolean regexMatch(String name, String keyword) {
-        Pattern pattern = Pattern.compile(keyword, Pattern.CASE_INSENSITIVE);
-        return pattern.matcher(name).find();
-    }
-
     @Override
     public boolean equals(Object other) {
         if (other == this) {
