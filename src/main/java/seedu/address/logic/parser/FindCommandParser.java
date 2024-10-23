@@ -11,6 +11,7 @@ import java.util.Arrays;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.ClassIdContainsKeywordsPredicate;
+import seedu.address.model.person.MonthsNotPaidContainsKeywordsPredicate;
 import seedu.address.model.person.MonthsPaidContainsKeywordsPredicate;
 import seedu.address.model.person.NameAndClassIdContainsKeywordsPredicate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
@@ -56,7 +57,7 @@ public class FindCommandParser implements Parser<FindCommand> {
                 && argMultimap.getValue(PREFIX_CLASSID).isEmpty()
                 && argMultimap.getValue(PREFIX_MONTHPAID).isEmpty()) {
             String[] notMonthPaidKeywords = argMultimap.getValue(PREFIX_NOT_MONTHPAID).get().split("\\s+");
-            //return new FindCommand...
+            return new FindCommand(new MonthsNotPaidContainsKeywordsPredicate(Arrays.asList(notMonthPaidKeywords)));
         }
 
         if (argMultimap.getValue(PREFIX_NAME).isPresent() && argMultimap.getValue(PREFIX_CLASSID).isPresent()) {

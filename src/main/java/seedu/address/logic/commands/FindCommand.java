@@ -3,11 +3,13 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASSID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MONTHPAID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NOT_MONTHPAID;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.person.ClassIdContainsKeywordsPredicate;
+import seedu.address.model.person.MonthsNotPaidContainsKeywordsPredicate;
 import seedu.address.model.person.MonthsPaidContainsKeywordsPredicate;
 import seedu.address.model.person.NameAndClassIdContainsKeywordsPredicate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
@@ -30,15 +32,26 @@ public class FindCommand extends Command {
             + "Example 1: " + COMMAND_WORD + " " + PREFIX_NAME + "alice bob charlie\n"
             + "Example 2: " + COMMAND_WORD + " " + PREFIX_CLASSID + "1 2\n"
             + "Example 3: " + COMMAND_WORD + " " + PREFIX_NAME + "alice " + PREFIX_CLASSID + "1\n"
-            + "Example 4: " + COMMAND_WORD + " " + PREFIX_MONTHPAID + "2024-10\n";
-
+            + "Example 4: " + COMMAND_WORD + " " + PREFIX_MONTHPAID + "2024-10\n"
+            + "Example 5: " + COMMAND_WORD + " " + PREFIX_NOT_MONTHPAID + "2024-10\n";
     public static final String NO_SEARCH_FIELDS_PROVIDED = "At least one field to search by must be provided.";
-
     private final NameContainsKeywordsPredicate predicateNameId;
     private final ClassIdContainsKeywordsPredicate predicateClassId;
     private final MonthsPaidContainsKeywordsPredicate predicateMonthPaid;
-
+    private final MonthsNotPaidContainsKeywordsPredicate predicateNotMonthPaid;
     private final NameAndClassIdContainsKeywordsPredicate predicateNameAndClassId;
+
+    /**
+     * Stores the predicate to be used to filter the list of persons by Months not paid
+     * @param predicate the predicate to be used to filter the list of persons
+     */
+    public FindCommand(MonthsNotPaidContainsKeywordsPredicate predicate) {
+        this.predicateNotMonthPaid = predicate;
+        this.predicateNameId = null;
+        this.predicateClassId = null;
+        this.predicateMonthPaid = null;
+        this.predicateNameAndClassId = null;
+    }
 
     /**
      * Stores the predicate to be used to filter the list of persons by Monthspaid
@@ -47,6 +60,7 @@ public class FindCommand extends Command {
     public FindCommand(MonthsPaidContainsKeywordsPredicate predicate) {
         this.predicateMonthPaid = predicate;
         this.predicateNameId = null;
+        this.predicateNotMonthPaid = null;
         this.predicateClassId = null;
         this.predicateNameAndClassId = null;
     }
@@ -58,6 +72,7 @@ public class FindCommand extends Command {
         this.predicateNameId = predicate;
         this.predicateClassId = null;
         this.predicateMonthPaid = null;
+        this.predicateNotMonthPaid = null;
         this.predicateNameAndClassId = null;
     }
 
@@ -68,6 +83,7 @@ public class FindCommand extends Command {
     public FindCommand(ClassIdContainsKeywordsPredicate predicate) {
         this.predicateClassId = predicate;
         this.predicateNameId = null;
+        this.predicateNotMonthPaid = null;
         this.predicateMonthPaid = null;
         this.predicateNameAndClassId = null;
     }
@@ -79,6 +95,7 @@ public class FindCommand extends Command {
     public FindCommand(NameAndClassIdContainsKeywordsPredicate predicate) {
         this.predicateNameAndClassId = predicate;
         this.predicateNameId = null;
+        this.predicateNotMonthPaid = null;
         this.predicateClassId = null;
         this.predicateMonthPaid = null;
     }
@@ -95,6 +112,8 @@ public class FindCommand extends Command {
             model.updateFilteredPersonList(predicateClassId);
         } else if (predicateMonthPaid != null) {
             model.updateFilteredPersonList(predicateMonthPaid);
+        } else if (predicateNotMonthPaid != null) {
+            model.updateFilteredPersonList(predicateNotMonthPaid);
         } else {
             model.updateFilteredPersonList(predicateNameAndClassId);
         }
@@ -122,6 +141,8 @@ public class FindCommand extends Command {
             return predicateClassId.equals(otherFindCommand.predicateClassId);
         } else if (predicateMonthPaid != null) {
             return predicateMonthPaid.equals(otherFindCommand.predicateMonthPaid);
+        } else if (predicateNotMonthPaid != null) {
+            return predicateNotMonthPaid.equals(otherFindCommand.predicateNotMonthPaid);
         } else {
             assert(predicateNameAndClassId != null);
             return predicateNameAndClassId.equals(otherFindCommand.predicateNameAndClassId);
@@ -142,6 +163,10 @@ public class FindCommand extends Command {
         } else if (predicateMonthPaid != null) {
             return new ToStringBuilder(this)
                     .add("predicate", predicateMonthPaid)
+                    .toString();
+        } else if (predicateNotMonthPaid != null) {
+            return new ToStringBuilder(this)
+                    .add("predicate", predicateNotMonthPaid)
                     .toString();
         } else {
             return new ToStringBuilder(this)
