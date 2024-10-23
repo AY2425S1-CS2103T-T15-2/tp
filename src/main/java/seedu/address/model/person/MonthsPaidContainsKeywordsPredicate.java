@@ -20,7 +20,7 @@ public class MonthsPaidContainsKeywordsPredicate implements Predicate<Person> {
     public boolean test(Person person) {
         return keywords.stream()
                 .anyMatch(keyword -> person.getMonthsPaid().stream()
-                        .anyMatch(monthPaid -> StringUtil.containsWordIgnoreCase(monthPaid.toString(), keyword)));
+                        .anyMatch(monthPaid -> StringUtil.containsWordIgnoreCase(monthPaid.monthPaidValue, keyword)));
     }
 
     private boolean regexMatch(String name, String keyword) {
