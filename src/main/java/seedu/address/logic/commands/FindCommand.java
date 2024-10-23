@@ -7,6 +7,7 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.person.ClassIdContainsKeywordsPredicate;
+import seedu.address.model.person.MonthsPaidContainsKeywordsPredicate;
 import seedu.address.model.person.NameAndClassIdContainsKeywordsPredicate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 
@@ -30,20 +31,29 @@ public class FindCommand extends Command {
 
     public static final String NO_SEARCH_FIELDS_PROVIDED = "At least one field to search by must be provided.";
 
-    private final NameContainsKeywordsPredicate predicate;
-
+    private final NameContainsKeywordsPredicate predicateNameId;
     private final ClassIdContainsKeywordsPredicate predicateClassId;
-
+    private final MonthsPaidContainsKeywordsPredicate predicateMonthPaid;
     private final NameAndClassIdContainsKeywordsPredicate predicateNameAndClassId;
 
-
+    /**
+     * Stores the predicate to be used to filter the list of persons by Monthspaid
+     * @param predicate the predicate to be used to filter the list of persons
+     */
+    public FindCommand(MonthsPaidContainsKeywordsPredicate predicate) {
+        this.predicateMonthPaid = predicate;
+        this.predicateNameId = null;
+        this.predicateClassId = null;
+        this.predicateNameAndClassId = null;
+    }
     /**
      * Stores the predicate to be used to filter the list of persons by name
      * @param predicate the predicate to be used to filter the list of persons
      */
     public FindCommand(NameContainsKeywordsPredicate predicate) {
-        this.predicate = predicate;
+        this.predicateNameId = predicate;
         this.predicateClassId = null;
+        this.predicateMonthPaid = null;
         this.predicateNameAndClassId = null;
     }
 
@@ -53,7 +63,8 @@ public class FindCommand extends Command {
      */
     public FindCommand(ClassIdContainsKeywordsPredicate predicate) {
         this.predicateClassId = predicate;
-        this.predicate = null;
+        this.predicateNameId = null;
+        this.predicateMonthPaid = null;
         this.predicateNameAndClassId = null;
     }
 
@@ -63,8 +74,9 @@ public class FindCommand extends Command {
      */
     public FindCommand(NameAndClassIdContainsKeywordsPredicate predicate) {
         this.predicateNameAndClassId = predicate;
-        this.predicate = null;
+        this.predicateNameId = null;
         this.predicateClassId = null;
+        this.predicateMonthPaid = null;
     }
 
 
@@ -73,10 +85,12 @@ public class FindCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
 
-        if (predicate != null) {
-            model.updateFilteredPersonList(predicate);
+        if (predicateNameId != null) {
+            model.updateFilteredPersonList(predicateNameId);
         } else if (predicateClassId != null) {
             model.updateFilteredPersonList(predicateClassId);
+        } else if (predicateMonthPaid != null) {
+            model.updateFilteredPersonList(predicateMonthPaid);
         } else {
             model.updateFilteredPersonList(predicateNameAndClassId);
         }
@@ -98,10 +112,12 @@ public class FindCommand extends Command {
 
         FindCommand otherFindCommand = (FindCommand) other;
 
-        if (predicate != null) {
-            return predicate.equals(otherFindCommand.predicate);
+        if (predicateNameId != null) {
+            return predicateNameId.equals(otherFindCommand.predicateNameId);
         } else if (predicateClassId != null) {
             return predicateClassId.equals(otherFindCommand.predicateClassId);
+        } else if (predicateMonthPaid != null) {
+            return predicateMonthPaid.equals(otherFindCommand.predicateMonthPaid);
         } else {
             assert(predicateNameAndClassId != null);
             return predicateNameAndClassId.equals(otherFindCommand.predicateNameAndClassId);
@@ -111,19 +127,22 @@ public class FindCommand extends Command {
 
     @Override
     public String toString() {
-        if (predicate != null) {
+        if (predicateNameId != null) {
             return new ToStringBuilder(this)
-                    .add("predicate", predicate)
+                    .add("predicate", predicateNameId)
                     .toString();
         } else if (predicateClassId != null) {
             return new ToStringBuilder(this)
                     .add("predicate", predicateClassId)
+                    .toString();
+        } else if (predicateMonthPaid != null) {
+            return new ToStringBuilder(this)
+                    .add("predicate", predicateMonthPaid)
                     .toString();
         } else {
             return new ToStringBuilder(this)
                     .add("predicate", predicateNameAndClassId)
                     .toString();
         }
-
     }
 }
