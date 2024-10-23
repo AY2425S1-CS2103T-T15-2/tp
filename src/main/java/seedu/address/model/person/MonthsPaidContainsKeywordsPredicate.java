@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 
 
@@ -19,7 +20,7 @@ public class MonthsPaidContainsKeywordsPredicate implements Predicate<Person> {
     public boolean test(Person person) {
         return keywords.stream()
                 .anyMatch(keyword -> person.getMonthsPaid().stream()
-                        .anyMatch(monthPaid -> regexMatch(monthPaid.toString(), keyword)));
+                        .anyMatch(monthPaid -> StringUtil.containsWordIgnoreCase(monthPaid.toString(), keyword)));
     }
 
     private boolean regexMatch(String name, String keyword) {
