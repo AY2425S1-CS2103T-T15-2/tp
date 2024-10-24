@@ -67,7 +67,6 @@ public class MonthPaid implements Comparable<MonthPaid> {
         int otherMonth = Integer.parseInt(otherMonthYearParts[1]);
         return Integer.compare(otherMonth, currentMonth);
     }
-
     @Override
     public String toString() {
         return '[' + monthPaidValue + ']';
