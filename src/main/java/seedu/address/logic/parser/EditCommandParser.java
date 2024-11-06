@@ -84,7 +84,7 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         // throw error if no fields are edited
         if (!editPersonDescriptor.isAnyFieldEdited()) {
-            throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
         }
 
         return new EditCommand(index, editPersonDescriptor);
